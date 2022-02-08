@@ -4,14 +4,10 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CostService {
-  private readonly licensePrices = this.configService
-    .get<string>('LICENSE_PRICES_PER_HALF_COMPANY_SIZE')
-    .split(',')
-    .map((str) => +str);
-  private readonly accountPrices = this.configService
-    .get<string>('ACCOUNT_PRICES')
-    .split(',')
-    .map((str) => +str);
+  private readonly licensePrices = this.loadNumbers(
+    'LICENSE_PRICES_PER_HALF_COMPANY_SIZE',
+  );
+  private readonly accountPrices = this.loadNumbers('ACCOUNT_PRICES');
 
   constructor(private configService: ConfigService) {}
 
@@ -95,5 +91,12 @@ export class CostService {
         this.getMonthlyAccountsCost(numberOfAccounts, accountPrices) * 12 * 100,
       ) / 100
     );
+  }
+
+  private loadNumbers(propertyPath: string) {
+    return this.configService
+      .get<string>(propertyPath)
+      .split(',')
+      .map((str) => +str);
   }
 }
