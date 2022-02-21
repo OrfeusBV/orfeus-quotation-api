@@ -1,24 +1,22 @@
-import { Optional } from '@nestjs/common';
 import { Transform } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
 const toNumber = ({ value }) => +value;
 const toInt = ({ value }) => parseInt(value, 10);
 const toBoolean = ({ value }) => value === 'true';
 
 export class CalculateCostDto {
-  @Optional()
+  @IsNumber()
   @Transform(toNumber)
   companySize: number;
 
-  @Optional()
+  @IsNumber()
   @Transform(toInt)
   numberOfAccounts: number;
 
-  @Optional()
   @Transform(toBoolean)
   ultrasoundModule: boolean;
 
-  @Optional()
   @Transform(toBoolean)
   appPlusModule: boolean;
 }
